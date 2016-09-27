@@ -1,5 +1,6 @@
 package com.base.game;
 
+import com.base.engine.components.Meshrenderer;
 import com.base.engine.core.Game;
 import com.base.engine.core.GameObject;
 import com.base.engine.core.Vector2f;
@@ -17,15 +18,15 @@ public class TestGame extends Game {
 		float fieldWidth = 10.0f;
 		
 		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
-											new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth * 3), new Vector2f(0.0f, 1.0f)),
-											new Vertex( new Vector3f(fieldWidth * 3, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
+											new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth * 3), new Vector2f(1.0f, 0.0f)),
+											new Vertex( new Vector3f(fieldWidth * 3, 0.0f, -fieldDepth), new Vector2f(0.0f, 1.0f)),
 											new Vertex( new Vector3f(fieldWidth * 3, 0.0f, fieldDepth * 3), new Vector2f(1.0f, 1.0f))};
 		
 		int indices[] = { 0, 1, 2,
 					      2, 1, 3};
 		
 		Mesh mesh = new Mesh(vertices, indices,true);
-		Material material = new Material(new Texture("test.png"), new Vector3f(1, 1, 1),1,8);
+		Material material = new Material(new Texture("test.png"), new Vector3f(1, 1, 1),1.0f,8.0f);
 		
 		Meshrenderer meshRenderer = new Meshrenderer(mesh, material);
 		

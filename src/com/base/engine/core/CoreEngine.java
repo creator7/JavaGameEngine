@@ -25,8 +25,8 @@ public class CoreEngine
     	Window.createWindow(width, height, title);
     	this.renderingEngine = new RenderingEngine();
     }
-    
-    public void start()
+
+	public void start()
     {
     	if(isRunning)
     		return;
@@ -73,7 +73,6 @@ public class CoreEngine
             		stop();
         		
         		Input.update();
-        		
         		game.input((float)frameTime);
         		//Input.update();
         		renderingEngine.input((float)frameTime);
@@ -91,6 +90,7 @@ public class CoreEngine
         	if(render)
         	{
         		renderingEngine.render(game.getRootObject());
+        		
         		Window.render();
         		frames++;
         	}

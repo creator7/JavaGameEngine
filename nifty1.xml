@@ -1,0 +1,14 @@
+<nifty>
+	<screen id="startScreen" controller = "com.base.game.StartScreen">
+		<layer id ="background">
+			
+		</layer>
+		<layer childLayout = "vertical">
+			<panel childLayout = "vertical" backgroundColor = "#0f0f">
+				<panel backgroundColor = "#080f"/>
+					<text font ="regular.fnt" text =" HelLo World " align ="center" color="#000f"/>
+				<panel backgroundColor = "#080f"/>
+			</panel>
+		</layer>
+	</screen>
+</nifty>
