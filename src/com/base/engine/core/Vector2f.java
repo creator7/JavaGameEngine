@@ -42,6 +42,10 @@ public class Vector2f
 		return (float)Math.sqrt(x * x  +  y * y);
 	}
 	
+	public float max(){
+		return Math.max(x, y);
+	}
+	
 	public float dot(Vector2f r)
 	{
 		return x * r.getX() + y * r.getY();
@@ -116,5 +120,15 @@ public class Vector2f
 	
 	public boolean equals(Vector2f r){
 		return x == r.getX() && y == r.getY();
+	}
+	
+	public Vector2f set(float x, float y) {
+		this.x = x; 
+		this.y = y; 
+		return this;
+	}
+	
+	public Vector2f set(Vector2f r) {
+		return set(r.getX(),r.getY());
 	}
 }

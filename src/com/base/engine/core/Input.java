@@ -3,8 +3,12 @@ package com.base.engine.core;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-public class Input {
+public class Input 
+{
+	public static final int NUM_KEYCODES = 256;
+	public static final int NUM_MOUSEBUTTONS = 5;
 	
+	//All these constants come from LWJGL's Keyboard class
 	public static final int KEY_NONE            = 0x00;
 	public static final int KEY_ESCAPE          = 0x01;
 	public static final int KEY_1               = 0x02;
@@ -134,24 +138,16 @@ public class Input {
 	public static final int KEY_POWER           = 0xDE;
 	public static final int KEY_SLEEP           = 0xDF;
 	
-	public static final int NUM_KEYCODES = 256;
-	public static final int NUM_MOUSEBUTTONS = 5;
-	
-	
 	private static boolean[] lastKeys = new boolean[NUM_KEYCODES];
 	private static boolean[] lastMouse = new boolean[NUM_MOUSEBUTTONS];
 	
-	
 	public static void update()
 	{
-		
-		for (int i = 0; i < lastKeys.length; i++) {
+		for(int i = 0; i < NUM_KEYCODES; i++)
 			lastKeys[i] = getKey(i);
-		}
 		
-		for (int i = 0; i < lastMouse.length; i++) {
+		for(int i = 0; i < NUM_MOUSEBUTTONS; i++)
 			lastMouse[i] = getMouse(i);
-		}
 	}
 	
 	public static boolean getKey(int keyCode)
@@ -189,12 +185,13 @@ public class Input {
 		return new Vector2f(Mouse.getX(), Mouse.getY());
 	}
 	
-	public static void setMousePosition(Vector2f pos){
+	public static void setMousePosition(Vector2f pos)
+	{
 		Mouse.setCursorPosition((int)pos.getX(), (int)pos.getY());
 	}
 	
-	public static void setCursor(boolean enabled){
+	public static void setCursor(boolean enabled)
+	{
 		Mouse.setGrabbed(!enabled);
 	}
-	
 }

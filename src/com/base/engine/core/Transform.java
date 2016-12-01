@@ -1,60 +1,122 @@
 package com.base.engine.core;
 
-public class Transform 
+public class Transform
 {
 	
+	private Transform parent;
+	private Matrix4f parentMatrix;
+	
 	private Vector3f pos;
-	private Vector3f rot;
+	private Quaternion rot;
 	private Vector3f scale;
+	
+	private Vector3f oldPos;
+	private Quaternion oldRot;
+	private Vector3f oldScale;
 	
 	public Transform()
 	{
 		pos = new Vector3f(0,0,0);
-		rot =  new Vector3f(0,0,0);
-		scale =  new Vector3f(1,1,1);
+		rot = new Quaternion(0,0,0,1);
+		scale = new Vector3f(1,1,1);
+		parentMatrix = new Matrix4f().initIdentity();
+	}
+	
+	public void update(){
+		if(oldPos != null){
+			oldPos.set(pos);
+			oldRot.set(rot);
+			oldScale.set(scale);
+		}
+		else{
+			oldPos = new Vector3f(0, 0, 0).set(pos).add(1.0f);
+			oldRot = new Quaternion(0, 0,0,0).set(rot).mul(0.5f);
+			oldScale = new Vector3f(0, 0, 0).set(scale).add(1.0f);
+		}
+	}
+	
+	public void rotate(Vector3f axis, float angle){
+		rot = new Quaternion(axis, angle).mul(rot).normalized();
+	}
+	
+	
+	private boolean hasChanged(){
+		
+		if(parent != null && parent.hasChanged())
+			return true;
+		
+		if(!pos.equals(oldPos)){
+			return true;
+		}
+		
+		if(!rot.equals(oldRot)){
+			return true;
+		}
+		
+		if(!scale.equals(oldScale)){
+			return true;
+		}
+		
+		return false;
+		
 	}
 	
 	public Matrix4f getTransformation()
 	{
 		Matrix4f translationMatrix = new Matrix4f().initTranslation(pos.getX(), pos.getY(), pos.getZ());
-		Matrix4f rotationMatrix = new Matrix4f().initRotation(rot.getX(), rot.getY(), rot.getZ());
+		Matrix4f rotationMatrix = rot.toRotationMatrix();
 		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
 		
-		return translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
-		//return translationMatrix;
+		return getParentMatrix().mul(translationMatrix.mul(rotationMatrix.mul(scaleMatrix)));
 	}
 	
-	public Vector3f getPos() 
+	private Matrix4f getParentMatrix(){
+		if(parent != null && parent.hasChanged()){
+			parentMatrix = parent.getTransformation();
+		}
+		
+		return parentMatrix;
+	}
+	
+	public Vector3f getTransformedPos(){
+		return getParentMatrix().transform(pos);
+	}
+	
+	public Quaternion getTransformedRot(){
+		
+		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
+		
+		if(parent != null){
+			parentRotation = parent.getTransformedRot();
+		}
+		return parentRotation.mul(rot);
+	}
+	
+	public void setParent(Transform parent){
+		this.parent = parent;
+	}
+	
+	public Vector3f getPos()
 	{
 		return pos;
 	}
-
-	public void setPos(Vector3f pos) 
+	
+	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
 	}
-	
-	public void setPos(float x, float y, float z) 
-	{
-		this.pos = new Vector3f(x, y, z);
-	}
 
-	public Vector3f getRotation() 
+	public Quaternion getRot()
 	{
 		return rot;
 	}
 
-	public void setRotation(Vector3f rot) 
+	public void setRot(Quaternion rotation)
 	{
-		this.rot = rot;
-	}
-	
-	public void setRotation(float x, float y, float z)
-	{
-		this.rot = new Vector3f(x, y, z);
+		this.rot = rotation;
 	}
 
-	public Vector3f getScale() 
+	public Vector3f getScale()
 	{
 		return scale;
 	}
@@ -63,10 +125,4 @@ public class Transform
 	{
 		this.scale = scale;
 	}
-	
-	public void setScale(float x, float y, float z)
-	{
-		this.scale = new Vector3f(x, y, z);
-	}
-
 }

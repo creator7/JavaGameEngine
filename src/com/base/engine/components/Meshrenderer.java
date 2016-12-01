@@ -1,8 +1,8 @@
 package com.base.engine.components;
 
-import com.base.engine.core.Transform;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Mesh;
+import com.base.engine.rendering.RenderingEngine;
 import com.base.engine.rendering.Shader;
 
 public class Meshrenderer extends GameComponent{
@@ -15,11 +15,12 @@ public class Meshrenderer extends GameComponent{
 		this.mesh = mesh;
 		this.material = material;
 	}
-	
-	public void render(Transform transform, Shader shader){
+
+	@Override
+	public void render(Shader shader, RenderingEngine renderingEngine){
 		
 		shader.bind();
-		shader.updateUniforms(transform, material);
+		shader.updateUniforms(getTransform(),material, renderingEngine);
 		mesh.Draw();
 	}
 	

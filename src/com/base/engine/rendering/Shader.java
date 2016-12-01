@@ -10,14 +10,12 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import com.base.engine.core.Matrix4f;
-import com.base.engine.core.RenderingEngine;
 import com.base.engine.core.Transform;
 import com.base.engine.core.Util;
 import com.base.engine.core.Vector3f;
 
 public class Shader 
 {
-	private RenderingEngine renderingEngine;
 	private int program;
 	private HashMap<String, Integer> uniforms;
 	
@@ -85,7 +83,7 @@ public class Shader
 		uniforms.put(uniform, uniformLocation);
 	}
 	
-	public void updateUniforms(Transform transform, Material material){
+	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine){
 		
 	}
 	
@@ -179,12 +177,5 @@ public class Shader
 	{
 		glUniformMatrix4(uniforms.get(uniformName), true , Util.createFlippedBuffer(value));
 	}
-
-	public RenderingEngine getRenderingEngine() {
-		return renderingEngine;
-	}
-
-	public void setRenderingEngine(RenderingEngine renderingEngine) {
-		this.renderingEngine = renderingEngine;
-	}
+	
 }

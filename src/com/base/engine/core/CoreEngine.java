@@ -1,5 +1,6 @@
 package com.base.engine.core;
 
+import com.base.engine.rendering.RenderingEngine;
 import com.base.engine.rendering.Window;
 
 public class CoreEngine 
@@ -11,7 +12,6 @@ public class CoreEngine
     private int width;
     private int height;
     private double frameTime;
-    
     public CoreEngine(int width, int height, double frameRate, Game game)
     {
     	isRunning = false;
@@ -75,7 +75,6 @@ public class CoreEngine
         		Input.update();
         		game.input((float)frameTime);
         		//Input.update();
-        		renderingEngine.input((float)frameTime);
         		game.update((float)frameTime);
         		
         		if(frameCounter >= 1.0)
@@ -89,7 +88,7 @@ public class CoreEngine
         	
         	if(render)
         	{
-        		renderingEngine.render(game.getRootObject());
+        		game.render(renderingEngine);
         		
         		Window.render();
         		frames++;

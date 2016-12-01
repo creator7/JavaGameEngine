@@ -1,5 +1,6 @@
 package com.base.engine.rendering;
 
+import com.base.engine.components.BaseLight;
 import com.base.engine.components.DirectionalLight;
 import com.base.engine.core.Matrix4f;
 import com.base.engine.core.Transform;
@@ -31,32 +32,32 @@ private static final ForwardDirectional instance = new ForwardDirectional();
 		addUniform("directionalLight.direction");
 	}
 	
-	public void updateUniforms(Transform transform, Material material){
+	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine){
 		
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = renderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 		
-		material.getTexture().bind();
+		material.getTexture("diffuse").bind();
 		
 		setUniform("model", worldMatrix);
 		setUniform("MVP", projectedMatrix);
 		
-		setUniformf("specularIntensity", material.getSpecularIntensity());
-		setUniformf("specularPower", material.getSpecularPower());
-		setUniform("eyePos", getRenderingEngine().getMainCamera().getPos());
+		setUniformf("specularIntensity", material.getFloat("specularIntensity"));
+		setUniformf("specularPower", material.getFloat("specularPower"));
+		setUniform("eyePos", renderingEngine.getMainCamera().getTransform().getTransformedPos());
 		
-		setUniform("directionalLight", getRenderingEngine().getDirectionalLight());
+		setUniformDirectionalLight("directionalLight", (DirectionalLight)renderingEngine.getActiveLight());
 	}
 	
-	public void setUniform(String uniformName , BaseLight baseLight)
+	public void setUniformBaseLight(String uniformName , BaseLight baseLight)
 	{
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 	
-	public void setUniform(String uniformName , DirectionalLight directionalLight)
+	public void setUniformDirectionalLight(String uniformName , DirectionalLight directionalLight)
 	{
-		setUniform(uniformName + ".base", directionalLight.getBase());
+		setUniformBaseLight(uniformName + ".base", (BaseLight)directionalLight);
 		setUniform(uniformName + ".direction", directionalLight.getDirection());
 		
 	}
