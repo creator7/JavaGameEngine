@@ -3,6 +3,7 @@ package com.base.engine.rendering.meshLoading;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.base.engine.core.Util;
 import com.base.engine.core.Vector2f;
@@ -73,6 +74,12 @@ public class OBJModel {
 	
 	public IndexedModel toIndexedmodel(){
 		IndexedModel result = new IndexedModel();
+		IndexedModel normalModel = new IndexedModel();
+		
+		HashMap<OBJIndex, Integer> resultIndexMap = new HashMap<>();
+		HashMap<Integer, Integer> normalIndexMap = new HashMap<>();
+		HashMap<Integer, Integer> IndexMap = new HashMap<>();
+		
 		for(int i=0; i<indices.size();i++){
 			
 			OBJIndex currentIndex = indices.get(i);
@@ -91,18 +98,42 @@ public class OBJModel {
 			else
 				currentNormal = new Vector3f(0, 0, 0);
 			
-//			int previousVertexIndex = -1;
-//			
-//			for(int j = 0; j<i;j++){
-//				OBJIndex 
-//				
-//			}
-			result.getPositions().add(currentPosition);
-			result.getNormals().add(currentNormal);
-			result.getTexCoords().add(currentTexCoord);
-			result.getIndices().add(i);
+			Integer modelVertexIndex = resultIndexMap.get(currentIndex);
+			
+			if(modelVertexIndex == null){
+				resultIndexMap.put(currentIndex, result.getPositions().size());
+				modelVertexIndex = result.getPositions().size();
+				
+				result.getPositions().add(currentPosition);
+				result.getTexCoords().add(currentTexCoord);
+				if(hasNormals)
+					result.getNormals().add(currentNormal);
+			}
+			
+			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertexIndex);
+			
+			if(normalModelIndex == null){
+				normalIndexMap.put(currentIndex.vertexIndex, normalModel.getPositions().size());
+				normalModelIndex = normalModel.getPositions().size();
+				
+				normalModel.getPositions().add(currentPosition);
+				normalModel.getNormals().add(currentNormal);
+				normalModel.getTexCoords().add(currentTexCoord);
+			}
+			
+			result.getIndices().add(modelVertexIndex);
+			normalModel.getIndices().add(normalModelIndex);
+			IndexMap.put(modelVertexIndex, normalModelIndex);
 			
 		}
+		if(!hasNormals){
+			normalModel.calcNormals();
+			
+			for(int i = 0; i < result.getPositions().size(); i++){
+				result.getNormals().add(normalModel.getNormals().get(IndexMap.get(i)));
+			}
+		}
+		
 		return result;
 	}
 	

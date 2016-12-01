@@ -23,7 +23,7 @@ public class RenderingEngine {
 		
 		lights = new ArrayList<BaseLight>();
 		
-		glClearColor(0.0f , 0.0f, 0.0f, 0.0f);
+		glClearColor( 0.1f, 0.1f, 0.0f, 0.0f);
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
@@ -32,33 +32,8 @@ public class RenderingEngine {
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
 		
-		//mainCamera = new Camera((float)Math.toRadians(70.0f), (float)(Window.getWidth()/Window.getHeight()), 0.1f, 1000f);
+
 		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
-		
-//		int lightFieldWidth = 5;
-//		int lightFieldDepth = 5;
-//		
-//		float lightFieldStartX = 0;
-//		float lightFieldStartY = 0;
-//		float lightFieldStepX = 7;
-//		float lightFieldStepY = 7;
-//		
-//		pointLightList = new PointLight[lightFieldWidth * lightFieldDepth];
-//		
-//		for(int i = 0; i < lightFieldWidth; i++)
-//		{
-//			for(int j = 0; j < lightFieldDepth; j++)
-//			{
-//				pointLightList[i * lightFieldWidth + j] = new PointLight(new BaseLight(new Vector3f(0,1,0), 0.5f),
-//				new Attenuation(0,0,1),
-//				new Vector3f(lightFieldStartX + lightFieldStepX * i,0,lightFieldStartY + lightFieldStepY * j), 100);
-//			}
-//		}
-//		
-//		activePointLight = pointLightList[0];
-//		
-//		spotLight = new SpotLight(new PointLight(new BaseLight(new Vector3f(0,1,1), 0.4f),new Attenuation(0,0,0.1f),
-//				new Vector3f(lightFieldStartX,0,lightFieldStartY), 100), new Vector3f(1,0,0), 0.7f);
 	}
 	
 	public Vector3f getAmbientLight() {
@@ -81,7 +56,6 @@ public class RenderingEngine {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
 		glDepthMask(false);
-		//glDisable(GL_DEPTH_TEST);
 		glDepthFunc(GL_EQUAL);
 	
 
@@ -101,17 +75,6 @@ public class RenderingEngine {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-	
-//	private void setTextures(boolean enabled){
-//		if(enabled)
-//			glEnable(GL_TEXTURE_2D);
-//		else
-//			glDisable(GL_TEXTURE_2D);
-//	}
-	
-//	private static void setClearColor(Vector3f color){
-//		glClearColor(color.getX(), color.getY(), color.getZ(), 1.0f);
-//	}
 	
 	public static void unbindTextures(){
 		glBindTexture(GL_TEXTURE_2D, 0);
