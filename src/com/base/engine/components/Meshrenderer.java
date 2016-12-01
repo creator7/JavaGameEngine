@@ -21,7 +21,7 @@ public class Meshrenderer extends GameComponent{
 		
 		shader.bind();
 		shader.updateUniforms(getTransform(),material, renderingEngine);
-		mesh.Draw();
+		mesh.draw();
 	}
 	
 	

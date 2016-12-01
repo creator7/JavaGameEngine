@@ -4,10 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.base.engine.core.Util;
@@ -53,13 +49,14 @@ public class Mesh
 		size = indices.length;
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo );
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo );
 		
 		glBufferData(GL_ARRAY_BUFFER, Util.createFlippedBuffer(vertices), GL_STATIC_DRAW);
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo );
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.createFlippedBuffer(indices), GL_STATIC_DRAW);
 	}
 	
-	public void Draw()
+	public void draw()
 	{
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -70,8 +67,6 @@ public class Mesh
 		glVertexAttribPointer(0 , 3 , GL_FLOAT , false , Vertex.SIZE * 4 , 0);
 		glVertexAttribPointer(1 , 2, GL_FLOAT , false , Vertex.SIZE * 4 , 12);
 		glVertexAttribPointer(2 , 3, GL_FLOAT , false , Vertex.SIZE * 4 , 20);
-		
-		glDrawArrays(GL_TRIANGLES, 0, size);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT , 0);

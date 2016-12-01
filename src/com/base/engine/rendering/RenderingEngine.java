@@ -23,7 +23,7 @@ public class RenderingEngine {
 		
 		lights = new ArrayList<BaseLight>();
 		
-		glClearColor(0.0f , 0.0f, 0.0f, 1.0f);
+		glClearColor(0.0f , 0.0f, 0.0f, 0.0f);
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
@@ -33,7 +33,7 @@ public class RenderingEngine {
 		glEnable(GL_TEXTURE_2D);
 		
 		//mainCamera = new Camera((float)Math.toRadians(70.0f), (float)(Window.getWidth()/Window.getHeight()), 0.1f, 1000f);
-		ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
 		
 //		int lightFieldWidth = 5;
 //		int lightFieldDepth = 5;
@@ -80,8 +80,8 @@ public class RenderingEngine {
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
-		//glDepthMask(false);
-		glDisable(GL_DEPTH_TEST);
+		glDepthMask(false);
+		//glDisable(GL_DEPTH_TEST);
 		glDepthFunc(GL_EQUAL);
 	
 
@@ -93,7 +93,7 @@ public class RenderingEngine {
 		}
 
 		glDepthFunc(GL_LESS);
-		glEnable(GL_DEPTH_TEST);
+		glDepthMask(true);
 		glDisable(GL_BLEND);
 	}
 	

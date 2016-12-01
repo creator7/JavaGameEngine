@@ -2,12 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Abdullah/Documents/slick-util/lib/lwjgl.jar">
+	<classpathentry kind="lib" path="C:/Users/Abdullah/workspace/3DGameEngine/lib/lwjgl-2.9.1.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Abdullah/Documents/slick-util/lib/natives-windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Abdullah/workspace/3DGameEngine/lib/natives/windows"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Abdullah/Documents/slick-util/lib/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Abdullah/Documents/slick-util/lib/slick-util.jar" sourcepath="C:/Users/Abdullah/Documents/slick-util/lib/slick-util-src.zip"/>
+	<classpathentry kind="lib" path="C:/Users/Abdullah/workspace/3DGameEngine/lib/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
