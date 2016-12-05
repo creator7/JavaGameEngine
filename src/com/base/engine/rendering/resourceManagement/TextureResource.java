@@ -1,0 +1,38 @@
+package com.base.engine.rendering.resourceManagement;
+
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
+
+public class TextureResource {
+	
+	private int id;
+	private int refCount;
+	
+	public TextureResource(int id) {
+		this.id = id;
+		this.refCount = 1;
+	}
+	
+	public void addReference(){
+		refCount++;
+	}
+	
+	public boolean removeReference(){
+		refCount--;
+		return refCount == 0;
+	}
+	
+	@Override
+	protected void finalize(){
+		glDeleteBuffers(id);
+		
+	}
+
+	public int getid() {
+		return id;
+	}
+	
+	public void setID(int id){
+		this.id = id;
+	}
+
+}

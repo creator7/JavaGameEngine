@@ -31,22 +31,28 @@ public class TestGame extends Game
 		Mesh mesh2 = new Mesh(vertices2, indices2, true);
 
 		Mesh mesh = new Mesh(vertices, indices, true);
-		Material material = new Material();//new Texture("test.png"), new Vector3f(1,1,1), 1, 8);
+		Material material = new Material();
 		material.addTexture("diffuse", new Texture("test.png"));
-		material.addFloat("specularIntensity", 1);
-		material.addFloat("specularPower", 8);
+		//material.addFloat("specularIntensity", 1);
+		//material.addFloat("specularPower", 8);
+		
+		
+		Material material2 = new Material();
+		material2.addTexture("diffuse", new Texture("test.png"));
+		material2.addFloat("specularIntensity", 1);
+		material2.addFloat("specularPower", 8);
 		
 
 		Mesh tempMesh = new Mesh("monkey.obj");
 
-		Meshrenderer meshRenderer = new Meshrenderer(mesh, material);
+		Meshrenderer meshRenderer = new Meshrenderer(mesh, material2);
 
 		GameObject planeObject = new GameObject();
 		planeObject.addComponent(meshRenderer);
 		planeObject.getTransform().getPos().set(0, -1, 5);
 
 		GameObject directionalLightObject = new GameObject();
-		DirectionalLight directionalLight = new DirectionalLight(new Vector3f(0,0,1), 0.4f);
+		DirectionalLight directionalLight = new DirectionalLight(new Vector3f(0.0f,1f,1f), 0.4f);
 
 		directionalLightObject.addComponent(directionalLight);
 
@@ -54,24 +60,24 @@ public class TestGame extends Game
 		pointLightObject.addComponent(new PointLight(new Vector3f(0,1,0), 0.4f, new Vector3f(0,0,1)));
 
 		
-//		int lightFieldWidth = 5;
-//		int lightFieldDepth = 5;
-//
-//		float lightFieldStartX = 0;
-//		float lightFieldStartY = 0;
-//		float lightFieldStepX = 7;
-//		float lightFieldStepY = 7;
-//
-//		for(int i = 0; i < lightFieldWidth; i++)
-//		{
-//			for(int j = 0; j < lightFieldDepth; j++)
-//			{
-//				GameObject activeLight = new GameObject();
-//				activeLight.addComponent(new PointLight(new Vector3f(0,1,0), 0.4f, new Vector3f(0,0,1)));
-//				activeLight.getTransform().getPos().set(new Vector3f(lightFieldStartX + lightFieldStepX * i,0,lightFieldStartY + lightFieldStepY * j));
-//				addObject(activeLight);
-//			}
-//		}
+		int lightFieldWidth = 5;
+		int lightFieldDepth = 5;
+
+		float lightFieldStartX = 0;
+		float lightFieldStartY = 0;
+		float lightFieldStepX = 7;
+		float lightFieldStepY = 7;
+
+		for(int i = 0; i < lightFieldWidth; i++)
+		{
+			for(int j = 0; j < lightFieldDepth; j++)
+			{
+				GameObject activeLight = new GameObject();
+				activeLight.addComponent(new PointLight(new Vector3f(0,0.8f,0.8f), 0.4f, new Vector3f(0,0,1)));
+				activeLight.getTransform().getPos().set(new Vector3f(lightFieldStartX + lightFieldStepX * i,0,lightFieldStartY + lightFieldStepY * j));
+				addObject(activeLight);
+			}
+		}
 		
 		SpotLight spotLight = new SpotLight(new Vector3f(0,1,1), 0.4f,
 				new Vector3f(0,0,0.1f), 0.7f);
@@ -89,9 +95,9 @@ public class TestGame extends Game
 
 		//getRootObject().addChild(new GameObject().addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f)));
 
-		GameObject testMesh1 = new GameObject().addComponent(new Meshrenderer(mesh2, material));
-		GameObject testMesh2 = new GameObject().addComponent(new Meshrenderer(mesh2, material));
-		GameObject monkey = new GameObject().addComponent(new Meshrenderer(tempMesh, material));
+		GameObject testMesh1 = new GameObject().addComponent(new Meshrenderer(mesh2, material2));
+		GameObject testMesh2 = new GameObject().addComponent(new Meshrenderer(mesh2, material2));
+		GameObject monkey = new GameObject().addComponent(new Meshrenderer(tempMesh, material2));
 
 		testMesh1.getTransform().getPos().set(0, 2, 0);
 		testMesh1.getTransform().setRot(new Quaternion(new Vector3f(0,1,0), 0.4f));
@@ -106,8 +112,11 @@ public class TestGame extends Game
 
 		addObject(testMesh1);
 		addObject(monkey);
-		addObject(new GameObject().addComponent(new Meshrenderer(new Mesh("monkey.obj"), material)));
+		GameObject boy = new GameObject().addComponent(new Meshrenderer(new Mesh("boy.obj"), material));
+		addObject(boy);
+		boy.getTransform().setRot(new Quaternion(new Vector3f(1, 0, 0), (float)Math.toRadians(-90)));
+		boy.getTransform().setPos(new Vector3f(5, -1, 10));
 
-		directionalLight.getTransform().setRot(new Quaternion(new Vector3f(1,0,0), (float)Math.toRadians(-45)));
+		directionalLight.getTransform().setRot(new Quaternion(new Vector3f(1,0,0), (float)Math.toRadians(-90)));
 	}
 }

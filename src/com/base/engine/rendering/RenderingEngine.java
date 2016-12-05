@@ -23,7 +23,7 @@ public class RenderingEngine {
 		
 		lights = new ArrayList<BaseLight>();
 		
-		glClearColor( 0.1f, 0.1f, 0.0f, 0.0f);
+		glClearColor( 0.0f, 0.0f, 0.0f, 0.0f);
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);

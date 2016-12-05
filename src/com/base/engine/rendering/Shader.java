@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Shader
@@ -126,10 +127,28 @@ public class Shader
 		glAttachShader(program, shader);
 	}
 	
-	private static String loadShader(String fileName)
+	public void addAllUniforms(String shaderText){
+		final String UNIFORM_KEYWORD = "uniform";
+		int uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
+		
+		while(uniformStartLocation != -1){
+			int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
+			int end = shaderText.indexOf(";",begin);
+			
+			String uniformLine = shaderText.substring(begin,end);
+			String uniformName = uniformLine.substring(uniformLine.indexOf(" ") + 1, uniformLine.length());
+			
+			addUniform(uniformName);
+			
+			uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
+		}
+	}
+	
+	public static String loadShader(String fileName)
 	{
 		StringBuilder shaderSource = new StringBuilder();
 		BufferedReader shaderReader = null;
+		final String INCLUDE_DIRECTIVE = "#include";
 		
 		try
 		{
@@ -138,7 +157,13 @@ public class Shader
 			
 			while((line = shaderReader.readLine()) != null)
 			{
-				shaderSource.append(line).append("\n");
+				if(line.startsWith(INCLUDE_DIRECTIVE)){
+					shaderSource.append(loadShader(line.substring(INCLUDE_DIRECTIVE.length() + 2, line.length()-1)));
+				}
+				else{
+					shaderSource.append(line).append("\n");
+				}
+				
 			}
 			
 			shaderReader.close();
@@ -152,6 +177,23 @@ public class Shader
 		
 		return shaderSource.toString();
 	}
+	
+//	private HashMap<String, ArrayList<String>> findUniformStructs(String shaderText){
+//		final String STRUCT_KEYWORD = "struct";
+//		int structStartLocation = shaderText.indexOf(STRUCT_KEYWORD);
+//		
+//		while(structStartLocation != -1){
+//			int nameBegin = structStartLocation + STRUCT_KEYWORD.length() + 1;
+//			int braceBegin = shaderText.indexOf("{",nameBegin);
+//			int braceEnd = shaderText.indexOf("}", braceBegin);
+//			
+//			
+//			String structName = shaderText.substring(nameBegin, braceBegin).trim();
+//			
+//			
+//			structStartLocation = shaderText.indexOf(STRUCT_KEYWORD, structStartLocation + STRUCT_KEYWORD.length());
+//		}
+//	}
 	
 	public void setUniformi(String uniformName, int value)
 	{

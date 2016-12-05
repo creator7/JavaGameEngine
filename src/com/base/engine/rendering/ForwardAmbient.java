@@ -14,12 +14,21 @@ private static final ForwardAmbient instance = new ForwardAmbient();
 	public ForwardAmbient() {
 		super();
 		
-		addVertexShaderFromFile("forward-ambient.vs");
-		addFragmentShaderFromFile("forward-ambient.fs");
+		String vertexShaderText = loadShader("forward-ambient.vs");
+		String fragmentShaderText = loadShader("forward-ambient.fs");
+		
+		
+		addVertexShader(vertexShaderText);
+		addFragmentShader(fragmentShaderText);
+		
 		
 		compileShader();
-		addUniform("MVP");
-		addUniform("ambientIntensity");
+		
+		addAllUniforms(vertexShaderText);
+		addAllUniforms(fragmentShaderText);
+//		
+//		addUniform("MVP");
+//		addUniform("ambientIntensity");
 	}
 	
 	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine){
