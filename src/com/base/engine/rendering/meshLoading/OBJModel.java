@@ -55,7 +55,6 @@ public class OBJModel {
 				}
 				
 				else if(tokens[0].equals("f")){
-					
 					for(int i = 0; i < tokens.length - 3; i++){
 						indices.add(parseOBJIndex(tokens[1]));
 						indices.add(parseOBJIndex(tokens[2 + i]));
@@ -71,6 +70,28 @@ public class OBJModel {
 			System.exit(1);
 		}
 	}
+	
+	private OBJIndex parseOBJIndex(String token){
+	
+		String[] values = token.split("/");
+		OBJIndex result = new OBJIndex();
+		
+		result.vertexIndex = Integer.parseInt(values[0]) - 1;
+		
+		if(values.length > 1){
+			hasTexCoords = true;
+			if(!values[1].isEmpty())
+				result.texCoordIndex = Integer.parseInt(values[1]) - 1;
+			
+			if(values.length > 2){
+				hasNormals = true;
+				result.normalIndex = Integer.parseInt(values[2]) - 1;
+			}
+		}
+		
+		return result;
+	}
+
 	
 	public IndexedModel toIndexedmodel(){
 		IndexedModel result = new IndexedModel();
@@ -137,26 +158,4 @@ public class OBJModel {
 		return result;
 	}
 	
-	private OBJIndex parseOBJIndex(String token){
-	
-		String[] values = token.split("/");
-		OBJIndex result = new OBJIndex();
-		
-		result.vertexIndex = Integer.parseInt(values[0]) - 1;
-		
-		if(values.length > 1){
-			
-			hasTexCoords = true;
-			result.texCoordIndex = Integer.parseInt(values[1]) - 1;
-			
-			if(values.length > 2){
-				
-				hasNormals = true;
-				result.normalIndex = Integer.parseInt(values[2]) - 1;
-			}
-		}
-		
-		return result;
-	}
-
 }

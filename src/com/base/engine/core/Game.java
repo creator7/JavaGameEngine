@@ -30,4 +30,8 @@ public abstract class Game
 	public void render(RenderingEngine renderingEngine){
 		renderingEngine.render(getRootObject());
 	}
+	
+	public void setEngine(CoreEngine engine){
+		getRootObject().setEngine(engine);
+	}
 }

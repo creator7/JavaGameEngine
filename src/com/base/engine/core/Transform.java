@@ -92,6 +92,16 @@ public class Transform
 		return parentRotation.mul(rot);
 	}
 	
+	public void LookAt(Vector3f point, Vector3f up)
+	{
+		rot = GetLookAtRotation(point, up);
+	}
+
+	public Quaternion GetLookAtRotation(Vector3f point, Vector3f up)
+	{
+		return new Quaternion(new Matrix4f().initRotation(point.sub(pos).normalized(), up));
+	}
+	
 	public void setParent(Transform parent){
 		this.parent = parent;
 	}

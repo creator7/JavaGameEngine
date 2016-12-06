@@ -9,10 +9,10 @@ in vec3 worldPos0;
 out vec4 fragColor;
 
 uniform sampler2D diffuse;
-uniform DirectionalLight directionalLight;
+uniform DirectionalLight R_directionalLight;
 
 
 void main()
 {
-	fragColor = texture(diffuse, texCoord0) * calcDirectionalLight(directionalLight,normalize(normal0), worldPos0);	
+	fragColor = texture(diffuse, texCoord0) * calcDirectionalLight(R_directionalLight,normalize(normal0), worldPos0);	
 }
