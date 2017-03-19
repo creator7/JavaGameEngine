@@ -187,7 +187,7 @@ public class Input
 	
 	public static void setMousePosition(Vector2f pos)
 	{
-		Mouse.setCursorPosition((int)pos.getX(), (int)pos.getY());
+		Mouse.setCursorPosition((int)pos.x, (int)pos.y);
 	}
 	
 	public static void setCursor(boolean enabled)

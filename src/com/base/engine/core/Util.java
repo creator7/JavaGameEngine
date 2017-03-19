@@ -33,14 +33,14 @@ public class Util
 		
 		for (int i = 0; i < vertices.length; i++) 
 		{
-			buffer.put(vertices[i].getPos().getX());
-			buffer.put(vertices[i].getPos().getY());
-			buffer.put(vertices[i].getPos().getZ());
-			buffer.put(vertices[i].getTexCoord().getX());
-			buffer.put(vertices[i].getTexCoord().getY());
-			buffer.put(vertices[i].getNormal().getX());
-			buffer.put(vertices[i].getNormal().getY());
-			buffer.put(vertices[i].getNormal().getZ());
+			buffer.put(vertices[i].getPos().x);
+			buffer.put(vertices[i].getPos().y);
+			buffer.put(vertices[i].getPos().z);
+			buffer.put(vertices[i].getTexCoord().x);
+			buffer.put(vertices[i].getTexCoord().y);
+			buffer.put(vertices[i].getNormal().x);
+			buffer.put(vertices[i].getNormal().y);
+			buffer.put(vertices[i].getNormal().z);
 		}
 		
 		buffer.flip();
@@ -97,4 +97,18 @@ public class Util
 		
 		return result;
 	}
+	
+	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
+		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+		float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+		float l3 = 1.0f - l1 - l2;
+		return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+	}
+	
+	public static float clamp(float val, float min, float max) {
+	    return Math.max(min, Math.min(max, val));
+	}
+	
+	
 }

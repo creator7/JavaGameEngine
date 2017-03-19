@@ -13,17 +13,30 @@ public class Camera extends GameComponent
 	{
 		this.projection = new Matrix4f().initPerspective(fov, aspect, zNear, zFar);
 	}
+	
+	public Camera(float left, float right, float bottom, float top, float near, float far){
+		this.projection = new Matrix4f().initOrthographic(left, right, bottom, top, near, far);
+	}
 
 	public Matrix4f getViewProjection()
 	{
 		Matrix4f cameraRotation = getTransform().getTransformedRot().conjugate().toRotationMatrix();
 		Vector3f cameraPos = getTransform().getTransformedPos().mul(-1);
 		
-		Matrix4f cameraTranslation = new Matrix4f().initTranslation(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
+		Matrix4f cameraTranslation = new Matrix4f().initTranslation(cameraPos.x, cameraPos.y, cameraPos.z);
 
 		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}
+	
+	public Matrix4f getSkyboxViewProjection()
+	{
+		Matrix4f cameraRotation = getTransform().getTransformedRot().conjugate().toRotationMatrix();
+		
+		Matrix4f cameraTranslation = new Matrix4f().initTranslation(0, 0, 0);
 
+		return projection.mul(cameraRotation.mul(cameraTranslation));
+	}
+	
 	@Override
 	public void addToEngine(CoreEngine engine)
 	{

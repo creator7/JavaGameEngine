@@ -5,19 +5,24 @@ import com.base.engine.components.DirectionalLight;
 import com.base.engine.components.PointLight;
 import com.base.engine.components.SpotLight;
 import com.base.engine.core.*;
+import com.base.engine.rendering.guis.GUI;
 import com.base.engine.rendering.resourceManagement.ShaderResource;
+import com.base.engine.rendering.skybox.SkyboxTexture;
 
 import static org.lwjgl.opengl.GL20.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.lwjgl.opengl.GL20;
 
 public class Shader
 {
 	private static HashMap<String, ShaderResource> loadedShaders = new HashMap<>();
 	private ShaderResource resource;
 	private String fileName;
+	private int vertexID;
+	private int fragmentID;
 	
 	public Shader(String fileName)
 	{
@@ -44,11 +49,18 @@ public class Shader
 		}
 	}
 	
+
 	@Override
 	protected void finalize(){
 		if(resource.removeReference() && !fileName.isEmpty()){
 			loadedShaders.remove(fileName);
 		}
+		stop();
+		GL20.glDetachShader(resource.getProgram(), vertexID );
+		GL20.glDetachShader(resource.getProgram(), fragmentID);
+		GL20.glDeleteShader(vertexID);
+		GL20.glDeleteShader(fragmentID);
+		GL20.glDeleteProgram(resource.getProgram());
 	}
 	
 	public void bind()
@@ -58,12 +70,12 @@ public class Shader
 	
 	private void addVertexShader(String text)
 	{
-		addProgram(text, GL_VERTEX_SHADER);
+		vertexID = addProgram(text, GL_VERTEX_SHADER);
 	}
 	
 	private void addFragmentShader(String text)
 	{
-		addProgram(text, GL_FRAGMENT_SHADER);
+		fragmentID = addProgram(text, GL_FRAGMENT_SHADER);
 	}
 
 	private void compileShader()
@@ -85,7 +97,7 @@ public class Shader
 		}
 	}
 
-	private void addProgram(String text, int type)
+	private int addProgram(String text, int type)
 	{
 		int shader = glCreateShader(type);
 		
@@ -105,10 +117,11 @@ public class Shader
 		}
 		
 		glAttachShader(resource.getProgram(), shader);
+		return shader;
 	}
 	
 	private void addAllUniforms(String shaderText){
-		
+
 		HashMap<String, ArrayList<GLSLStruct>> structs = findUniformStructs(shaderText);
 		
 		final String UNIFORM_KEYWORD = "uniform";
@@ -232,8 +245,11 @@ public class Shader
 					setUniform(uniformName, renderingEngine.getVector3f(unprefixedUnifromName));
 				else if (uniformType.equals("float"))
 					setUniformf(uniformName, renderingEngine.getFloat(unprefixedUnifromName));
-				else if(uniformType.equals("DirectionalLight"))
-					setUniformDirectionalLight(uniformName, (DirectionalLight)renderingEngine.getActiveLight());
+				else if(uniformType.equals("DirectionalLight")){
+					DirectionalLight light = (DirectionalLight)renderingEngine.getActiveLight();
+					setUniformDirectionalLight(uniformName, light);
+					//System.out.println("direction" + light.getDirection().toString());
+				}
 				else if(uniformType.equals("PointLight"))
 					setUniformPointLight(uniformName, (PointLight)renderingEngine.getActiveLight());
 				else if(uniformType.equals("SpotLight"))
@@ -252,10 +268,20 @@ public class Shader
 					setUniform(uniformName, material.getVector3f(uniformName));
 				else if (uniformType.equals("float"))
 					setUniformf(uniformName, material.getFloat(uniformName));
+				else if(uniformType.equals("int"))
+					setUniformi(uniformName, renderingEngine.isTerrain());
 				else
 					throw new IllegalArgumentException(uniformType + " is not a supported type of in Material");
 			}
 		}
+	}
+	
+	public void updateUniforms(Transform transform, SkyboxTexture texture, RenderingEngine renderingEngine){
+		
+	}
+	
+	public void updateUniforms(GUI gui){
+		
 	}
 	
 	private class GLSLStruct{
@@ -286,7 +312,6 @@ public class Shader
 			
 			String structName = shaderText.substring(nameBegin, braceBegin).trim();
 			ArrayList<GLSLStruct> glslStructs = new ArrayList<>();
-			
 			int componentSemiColonPos = shaderText.indexOf(";", braceBegin);
 			
 			while(componentSemiColonPos != -1 && componentSemiColonPos < braceEnd){
@@ -341,7 +366,7 @@ public class Shader
 	
 	public void setUniform(String uniformName, Vector3f value)
 	{
-		glUniform3f(resource.getUniforms().get(uniformName), value.getX(), value.getY(), value.getZ());
+		glUniform3f(resource.getUniforms().get(uniformName), value.x, value.y, value.z);
 	}
 	
 	public void setUniform(String uniformName, Matrix4f value)
@@ -377,5 +402,15 @@ public class Shader
 		setUniform(uniformName + ".direction", spotLight.getDirection());
 		setUniformf(uniformName + ".cuttoff", spotLight.getCuttoff());
 	}
+	
+	public void stop(){
+		GL20.glUseProgram(0);
+	}
+
+
+	public ShaderResource getResource() {
+		return resource;
+	}
+	
 
 }

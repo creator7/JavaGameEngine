@@ -1,6 +1,11 @@
 uniform vec3 C_eyePos;
 uniform float specularIntensity;
 uniform float specularPower;
+uniform int terrain;
+uniform sampler2D rTex;
+uniform sampler2D gTex;
+uniform sampler2D bTex;
+uniform sampler2D blendMap;
 
 struct BaseLight
 {
@@ -36,6 +41,8 @@ struct SpotLight
     float cuttoff;
 };
 
+vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2);
+
 
 vec4 calcLight(BaseLight base, vec3 direction, vec3 normal, vec3 worldPos)
 {
@@ -62,6 +69,7 @@ vec4 calcLight(BaseLight base, vec3 direction, vec3 normal, vec3 worldPos)
 	
 	return diffuseColor + specularColor;
 }
+
 
 vec4 calcPointLight(PointLight pointLight, vec3 normal, vec3 worldPos)
 {
@@ -104,4 +112,18 @@ vec4 calcSpotLight(SpotLight spotLight, vec3 normal, vec3 worldPos)
 vec4 calcDirectionalLight(DirectionalLight directionalLight, vec3 normal, vec3 worldPos)
 {
 	return calcLight(directionalLight.base, -directionalLight.direction,normal, worldPos);
+}
+
+vec4 terrainLight(sampler2D diffuse, vec2 texCoord0){
+		vec4 blendMapColor = texture2D(blendMap, texCoord0.xy);
+		float backTextureAmount = 1 - (blendMapColor.r + blendMapColor.g + blendMapColor.b);
+		vec2 tiledCoords = texCoord0 * 40.0;
+		vec4 backgroundTexColor = texture2D(diffuse,tiledCoords.xy) * backTextureAmount;
+		vec4 rTexColor = texture2D(rTex, tiledCoords.xy) * blendMapColor.r;
+		vec4 gTexColor = texture2D(gTex, tiledCoords.xy) * blendMapColor.g;
+		vec4 bTexColor = texture2D(bTex, tiledCoords.xy) * blendMapColor.b;
+		
+		vec4 totalColor = backgroundTexColor + rTexColor + gTexColor + bTexColor;
+		
+		return totalColor;
 }

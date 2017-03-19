@@ -61,6 +61,4 @@ public class IndexedModel {
 	public ArrayList<Integer> getIndices() {
 		return indices;
 	}
-		
-
 }

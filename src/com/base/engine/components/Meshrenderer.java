@@ -17,11 +17,12 @@ public class Meshrenderer extends GameComponent{
 	}
 
 	@Override
-	public void render(Shader shader, RenderingEngine renderingEngine){
-		
+	public void render(Shader shader, RenderingEngine renderingEngine){	
 		shader.bind();
+		renderingEngine.setTerrain(0);
 		shader.updateUniforms(getTransform(),material, renderingEngine);
 		mesh.draw();
+		shader.stop();
 	}
 	
 	

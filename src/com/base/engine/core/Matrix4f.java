@@ -1,5 +1,7 @@
 package com.base.engine.core;
 
+import com.base.engine.rendering.guis.GUI;
+
 public class Matrix4f
 {
 	private float[][] m;
@@ -60,9 +62,9 @@ public class Matrix4f
 	}
 	
 	public Vector3f transform(Vector3f r){
-		return new Vector3f(m[0][0] * r.getX() + m[0][1] * r.getY() + m[0][2] * r.getZ() + m[0][3],
-							m[1][0] * r.getX() + m[1][1] * r.getY() + m[1][2] * r.getZ() + m[1][3],
-							m[2][0] * r.getX() + m[2][1] * r.getY() + m[2][2] * r.getZ() + m[2][3]);
+		return new Vector3f(m[0][0] * r.x + m[0][1] * r.y + m[0][2] * r.z + m[0][3],
+							m[1][0] * r.x + m[1][1] * r.y + m[1][2] * r.z + m[1][3],
+							m[2][0] * r.x + m[2][1] * r.y + m[2][2] * r.z + m[2][3]);
 	}
 	
 	public Matrix4f initScale(float x, float y, float z)
@@ -121,9 +123,9 @@ public class Matrix4f
 		Vector3f r = right;
 		Vector3f u = up;
 
-		m[0][0] = r.getX();	m[0][1] = r.getY();	m[0][2] = r.getZ();	m[0][3] = 0;
-		m[1][0] = u.getX();	m[1][1] = u.getY();	m[1][2] = u.getZ();	m[1][3] = 0;
-		m[2][0] = f.getX();	m[2][1] = f.getY();	m[2][2] = f.getZ();	m[2][3] = 0;
+		m[0][0] = r.x;	m[0][1] = r.y;	m[0][2] = r.z;	m[0][3] = 0;
+		m[1][0] = u.x;	m[1][1] = u.y;	m[1][2] = u.z;	m[1][3] = 0;
+		m[2][0] = f.x;	m[2][1] = f.y;	m[2][2] = f.z;	m[2][3] = 0;
 		m[3][0] = 0;		m[3][1] = 0;		m[3][2] = 0;		m[3][3] = 1;
 
 		return this;
@@ -145,6 +147,14 @@ public class Matrix4f
 		}
 		
 		return res;
+	}
+	
+	public static Matrix4f getTransformation(GUI gui){
+		Matrix4f transformation = new Matrix4f().initIdentity();
+		Matrix4f translationMatrix = new Matrix4f().initTranslation(gui.getPosition().x, gui.getPosition().y, 0);
+		Matrix4f scaleMatrix = new Matrix4f().initScale(gui.getScale().x, gui.getScale().y, 1);
+		
+		return transformation.mul(translationMatrix).mul(scaleMatrix);
 	}
 	
 	public float[][] getM()
@@ -171,5 +181,13 @@ public class Matrix4f
 	public void set(int x, int y, float value)
 	{
 		m[x][y] = value;
+	}
+	
+	@Override
+	public String toString(){
+		return "m00 " + m[0][0] + " m01 " + m[0][1] + " m02 " + m[0][2] + " m03 " + m[0][3]
+				 + " m10 " + m[1][0] + " m11 " + m[1][1] + " m12 " + m[1][2] + " m13 " + m[1][3] 
+				 + " m20 " + m[2][0] + " m01 " + m[2][1] + " m22 " + m[2][2] + " m23 " + m[2][3]
+				 + " m30 " + m[3][0] + " m31 " + m[3][1] + " m32 " + m[3][2] + " m33 " + m[3][3];
 	}
 }

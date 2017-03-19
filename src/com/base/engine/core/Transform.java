@@ -20,6 +20,9 @@ public class Transform
 		rot = new Quaternion(0,0,0,1);
 		scale = new Vector3f(1,1,1);
 		parentMatrix = new Matrix4f().initIdentity();
+		oldPos = new Vector3f(0, 0, 0).set(pos).add(1.0f);
+		oldRot = new Quaternion(0, 0,0,0).set(rot).mul(0.5f);
+		oldScale = new Vector3f(0, 0, 0).set(scale).add(1.0f);
 	}
 	
 	public void update(){
@@ -63,9 +66,9 @@ public class Transform
 	
 	public Matrix4f getTransformation()
 	{
-		Matrix4f translationMatrix = new Matrix4f().initTranslation(pos.getX(), pos.getY(), pos.getZ());
+		Matrix4f translationMatrix = new Matrix4f().initTranslation(pos.x, pos.y, pos.z);
+		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.x, scale.y, scale.z);
 		Matrix4f rotationMatrix = rot.toRotationMatrix();
-		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
 		
 		return getParentMatrix().mul(translationMatrix.mul(rotationMatrix.mul(scaleMatrix)));
 	}

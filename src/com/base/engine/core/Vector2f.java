@@ -2,8 +2,8 @@ package com.base.engine.core;
 
 public class Vector2f
 {
-	private float x;
-	private float y;
+	public float x;
+	public float y;
 	
 	
 	public Vector2f(float x, float y)
@@ -17,26 +17,6 @@ public class Vector2f
 		return "(" + x + " " + y + ")";
 	}
 	
-	public float getX()
-	{
-		return x;
-	}
-
-	public void setX(float x)
-	{
-		this.x = x;
-	}
-
-	public float getY()
-	{
-		return y;
-	}
-
-	public void setY(float y)
-	{
-		this.y = y;
-	}
-	
 	public float length()
 	{
 		return (float)Math.sqrt(x * x  +  y * y);
@@ -48,11 +28,11 @@ public class Vector2f
 	
 	public float dot(Vector2f r)
 	{
-		return x * r.getX() + y * r.getY();
+		return x * r.x + y * r.y;
 	}
 	
 	public float cross(Vector2f r){
-		return x * r.getY() - y * r.getX(); 
+		return x * r.y - y * r.x; 
 	}
 	
 	public Vector2f normalize()
@@ -79,7 +59,7 @@ public class Vector2f
 	
 	public Vector2f add(Vector2f r)
 	{
-		return new Vector2f(x + r.getX() , y + r.getY());
+		return new Vector2f(x + r.x , y + r.y);
 	}
 	
 	public Vector2f add(float r)
@@ -89,7 +69,7 @@ public class Vector2f
 	
 	public Vector2f sub(Vector2f r)
 	{
-		return new Vector2f(x - r.getX() , y - r.getY());
+		return new Vector2f(x - r.x , y - r.y);
 	}
 	
 	public Vector2f sub(float r)
@@ -100,7 +80,7 @@ public class Vector2f
 	
 	public Vector2f mul(Vector2f r)
 	{
-		return new Vector2f(x * r.getX() , y * r.getY());
+		return new Vector2f(x * r.x , y * r.y);
 	}
 	
 	public Vector2f mul(float r)
@@ -110,7 +90,7 @@ public class Vector2f
 	
 	public Vector2f div(Vector2f r)
 	{
-		return new Vector2f(x / r.getX() , y / r.getY());
+		return new Vector2f(x / r.x , y / r.y);
 	}
 	
 	public Vector2f div(float r)
@@ -119,7 +99,7 @@ public class Vector2f
 	}
 	
 	public boolean equals(Vector2f r){
-		return x == r.getX() && y == r.getY();
+		return x == r.x && y == r.y;
 	}
 	
 	public Vector2f set(float x, float y) {
@@ -129,6 +109,6 @@ public class Vector2f
 	}
 	
 	public Vector2f set(Vector2f r) {
-		return set(r.getX(),r.getY());
+		return set(r.x,r.y);
 	}
 }

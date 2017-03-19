@@ -22,6 +22,8 @@ public class RenderingEngine extends MappedValues{
 	private BaseLight activelight;
 	private HashMap<String, Integer> samplerMap;
 	private Shader forwardAmbient;
+	private Vector3f ambientlight;
+	private int terrain;
 	
 	public RenderingEngine() {
 		super();
@@ -29,12 +31,16 @@ public class RenderingEngine extends MappedValues{
 		
 		samplerMap = new HashMap<>();
 		samplerMap.put("diffuse", 0);
+		samplerMap.put("rTex", 1);
+		samplerMap.put("gTex", 2);
+		samplerMap.put("bTex", 3);
+		samplerMap.put("blendMap", 4);
+		ambientlight = new Vector3f(0.1f, 0.1f, 0.1f);
 		
 		forwardAmbient = new Shader("forward-ambient");
-		addVector3f("ambient", new Vector3f(0.01f, 0.01f, 0.01f));
 		//addVector3f("ambient", new Vector3f(0.3f, 0.3f, 0.3f));
 		
-		glClearColor( 0.2f, 0.2f, 0.2f, 0.0f);
+		glClearColor( 0.5f, 0.8f, 0.95f, 0.0f);
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
@@ -48,21 +54,20 @@ public class RenderingEngine extends MappedValues{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		addVector3f("ambient", ambientlight);
 		object.render(forwardAmbient, this);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
 		glDepthMask(false);
 		glDepthFunc(GL_EQUAL);
-	
-
+		
 		for(BaseLight light: lights){
-			
 			activelight = light;
-			
 			object.render(light.getShader(), this);
 		}
-
+		
+		
 		glDepthFunc(GL_LESS);
 		glDepthMask(true);
 		glDisable(GL_BLEND);
@@ -95,5 +100,22 @@ public class RenderingEngine extends MappedValues{
 	public int getSamplerSlot(String samplerName){
 		return samplerMap.get(samplerName);
 	}
+	
+	public int isTerrain(){
+		return terrain;
+	}
+	
+	public void setTerrain(int terrain){
+		this.terrain = terrain;
+	}
+
+	public Vector3f getAmbientlight() {
+		return ambientlight;
+	}
+
+	public void setAmbientlight(Vector3f ambientlight) {
+		this.ambientlight = ambientlight;
+	}
+	
 	
 }

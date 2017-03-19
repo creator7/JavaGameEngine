@@ -8,6 +8,11 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
+
 import com.base.engine.core.Util;
 import com.base.engine.rendering.resourceManagement.TextureResource;
 
@@ -40,7 +45,7 @@ public class Texture {
 		}
 	}
 	
-	public void bind(){
+	public void unbind(){
 		bind(0);
 	}
 	
@@ -49,6 +54,7 @@ public class Texture {
 		glActiveTexture(GL_TEXTURE0 + samplerSlot);
 		glBindTexture(GL_TEXTURE_2D, resource.getid());
 	}
+	
 	
 	public int getID(){
 		return resource.getid();
@@ -84,11 +90,14 @@ public class Texture {
 	        TextureResource resource = new TextureResource();
 			glBindTexture(GL_TEXTURE_2D, resource.getid());
 			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D,GL14.GL_TEXTURE_LOD_BIAS,-0.4f);
 			
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 			
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 			
@@ -104,5 +113,6 @@ public class Texture {
 		
 		return null;
 	}
+	
 
 }

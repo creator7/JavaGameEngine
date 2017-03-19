@@ -46,13 +46,17 @@ public class FreeLook extends GameComponent{
 		{
 			Vector2f deltaPos = Input.getMousePosition().sub(centerPosition);
 			
-			boolean rotY = deltaPos.getX() != 0;
-			boolean rotX = deltaPos.getY() != 0;
+			boolean rotY = deltaPos.x != 0;
+			boolean rotX = deltaPos.y != 0;
 			
-			if(rotY)
-				getTransform().rotate(yAxis, (float) Math.toRadians(deltaPos.getX() * sensitivity));
-			if(rotX)
-				getTransform().rotate(getTransform().getRot().getRight(), ((float) Math.toRadians(-deltaPos.getY() * sensitivity)));
+			if(rotY){
+				getTransform().rotate(yAxis, (float) Math.toRadians(deltaPos.x * sensitivity));
+			}
+				
+			if(rotX){
+				getTransform().rotate(getTransform().getRot().getRight(), ((float) Math.toRadians(-deltaPos.y * sensitivity)));
+			}
+				
 			if(rotY || rotX)
 				Input.setMousePosition(new Vector2f(Window.getWidth()/2, Window.getHeight()/2));
 		}

@@ -1,5 +1,6 @@
 package com.base.engine.core;
 
+
 import com.base.engine.rendering.RenderingEngine;
 import com.base.engine.rendering.Window;
 
@@ -12,6 +13,7 @@ public class CoreEngine
     private int width;
     private int height;
     private double frameTime;
+    
     public CoreEngine(int width, int height, double frameRate, Game game)
     {
     	isRunning = false;
@@ -115,6 +117,6 @@ public class CoreEngine
 
 	public RenderingEngine getRenderingEngine() {
 		return renderingEngine;
-	} 
+	}
     
 }
